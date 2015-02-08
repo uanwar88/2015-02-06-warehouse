@@ -1,6 +1,7 @@
 class Item
   attr_accessor :item_name, :item_cat, :item_loc, :item_quant, :item_price, :item_desc
   
+  #create a new Item object
   def initialize(item_name,item_cat,item_loc,item_quant,item_price,item_desc)
     @item_name = item_name
     @item_cat = item_cat
@@ -10,6 +11,7 @@ class Item
     @item_desc = item_desc
   end
   
+  #insert item object into the database
   def insert
     attributes = []
     instance_variables.each { |i|
@@ -34,4 +36,17 @@ class Item
     
     puts "Inserted successfully!"  
   end
+  
+  #delete item by id or name from database
+  def self.delete(value)
+    if value.is_a?(Integer)
+      DATABASE.execute("DELETE FROM items WHERE id = #{value}")
+    else
+      DATABASE.execute("DELETE FROM items WHERE name = '#{value}'")
+    end
+  end
+  
+  def self.list_items
+    DATABASE.execute("SELECT id, name FROM items")
+  end  
 end
