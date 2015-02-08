@@ -5,11 +5,14 @@ class Menu
       @action = gets.chomp.to_i
       break if [1,2,3,4].include? @action
     end
-  
-    @action_text = "Add" if @action == 1
-    @action_text = "Delete" if @action == 2
-    @action_text = "Fetch" if @action == 3
-    @action_text = "Edit" if @action == 4
+    
+    action_items = ["Add", "Delete", "Fetch", "Edit"]
+    @action_text = action_items[@action-1]
+    
+    # @action_text = "Add" if @action == 1
+    # @action_text = "Delete" if @action == 2
+    # @action_text = "Fetch" if @action == 3
+    # @action_text = "Edit" if @action == 4
 
     loop do
       puts "#{@action_text}...", "1. Product", "2. Category", "3. Location"
@@ -17,9 +20,12 @@ class Menu
       break if [1,2,3].include? @pcl
     end
     
-    @pcl_text = "Product" if @pcl == 1
-    @pcl_text = "Category" if @pcl == 2
-    @pcl_text = "Location" if @pcl == 3
+    pcl_items = ["Product", "Category", "Location"]
+    @pcl_text = pcl_items[@pcl-1]
+    
+    # @pcl_text = "Product" if @pcl == 1
+    # @pcl_text = "Category" if @pcl == 2
+    # @pcl_text = "Location" if @pcl == 3
     
     if @action == 1 
       if @pcl == 1
@@ -35,11 +41,19 @@ class Menu
         item_price = gets.chomp.to_f
         puts "Enter item description: "
         item_desc = gets.chomp
+        
+        #add item to database
+        new_item = Item.new(item_name,item_cat,item_loc,item_quant,item_price,item_desc)
+        new_item.insert
       end
       
       if @pcl == 2
         puts "Enter category name: "
-        cat_name = gets.chomp        
+        cat_name = gets.chomp
+        
+        Category.add(cat_name)
+        
+        puts "Category added successfully!"      
       end
       
       if @pcl == 3
