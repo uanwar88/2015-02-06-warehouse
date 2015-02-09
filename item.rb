@@ -49,4 +49,20 @@ class Item
   def self.list_items
     DATABASE.execute("SELECT id, name FROM items")
   end  
+  
+  def self.list_items_details
+    DATABASE.execute("SELECT * FROM items")
+  end  
+  
+  def self.fetch_item_by(input,num)
+    if num == 1
+      DATABASE.execute("SELECT * FROM items WHERE id = #{input}")
+    elsif num == 2
+      DATABASE.execute("SELECT * FROM items WHERE name = '#{input}'")
+    elsif num == 3
+      DATABASE.execute("SELECT * FROM items WHERE category = '#{input}'")
+    else
+      DATABASE.execute("SELECT * FROM items WHERE location = '#{input}'")
+    end
+  end
 end
