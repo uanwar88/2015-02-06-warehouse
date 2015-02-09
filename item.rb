@@ -65,4 +65,14 @@ class Item
       DATABASE.execute("SELECT * FROM items WHERE location = '#{input}'")
     end
   end
+  
+  def self.edit(item_name,item_cat,item_loc,item_quant,item_price,item_desc,input)
+    if input.is_a?(Integer)
+      DATABASE.execute("UPDATE items SET name = '#{item_name}', category = '#{item_cat}', location = '#{item_loc}', quantity = #{item_quant}, 
+      cost = #{item_price}, description = '#{item_desc}' WHERE id = #{input}")
+    else
+      DATABASE.execute("UPDATE items SET name = '#{item_name}', category = '#{item_cat}', location = '#{item_loc}', quantity = #{item_quant}, 
+      cost = #{item_price}, description = '#{item_desc}' WHERE name = '#{input}'")
+    end
+  end
 end

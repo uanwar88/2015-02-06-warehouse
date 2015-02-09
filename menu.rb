@@ -1,5 +1,11 @@
 class Menu
+  
+  # Public: Menu.launch
+  # Description: Launches the CLI menu
+  # Returns: nothing specific
+  
   def self.launch
+    puts "Welcome to the grocery store manager!"
     loop do
       puts "What do you want to do?", "1. Add", "2. Delete", "3. Fetch", "4. Edit"
       @action = gets.chomp.to_i
@@ -21,12 +27,7 @@ class Menu
         break if [1,2,3,4].include? @fetch
       end
     elsif @action == 4
-      # loop do
-      #   puts "#{@action_text} by...", "1. Product ID", "2. Product name"
-      #   @edit_by = gets.chomp.to_i
-      #   break if [1,2].include? @edit_by
-      # end
-      id, name = action_by
+      @pcl_text = "Product"
     else
       loop do
         puts "#{@action_text}...", "1. Product", "2. Category", "3. Location"
@@ -37,12 +38,6 @@ class Menu
       pcl_items = ["Product", "Category", "Location"]
       @pcl_text = pcl_items[@pcl-1]
     end
-    
-
-    
-    # @pcl_text = "Product" if @pcl == 1
-    # @pcl_text = "Category" if @pcl == 2
-    # @pcl_text = "Location" if @pcl == 3
     
     if @action == 1 
       if @pcl == 1
@@ -136,29 +131,56 @@ class Menu
     end
     
     if @action == 4
-      if @edit_by == 1
-        puts id
+      id, name = action_by
+    
+      if id
+        puts Item.fetch_item_by(id,1)
+      else
+        puts Item.fetch_item_by(name,2)
       end
       
-      if @edit_by == 2
-        puts name
-      end
+      puts "Enter item name:"
+      item_name = gets.chomp
+      puts "Enter item category:"
+      item_cat = gets.chomp
+      puts "Enter item location: "
+      item_loc = gets.chomp
+      puts "Enter product quantity: "
+      item_quant = gets.chomp.to_i
+      puts "Enter price: "
+      item_price = gets.chomp.to_f
+      puts "Enter item description: "
+      item_desc = gets.chomp
+    
+      #edit item in database
+      if id
+        Item.edit(item_name,item_cat,item_loc,item_quant,item_price,item_desc,id)
+        puts "Item edited successfully!"
+      else
+        Item.edit(item_name,item_cat,item_loc,item_quant,item_price,item_desc,name)
+        puts "Item edited successfully!"
+      end        
     end      
   end
   
+  # Public: .action_by
+  # Description: Used to get product, category, or location ID or name
+  # Returns: id, name as integer or string
+  
   def self.action_by
-    puts "#{@action_text} #{@action == 4 ? "product" : @pcl_text} by...", "1. ID", "2. Name"
+    puts "#{@action_text} #{@pcl_text} by...", "1. ID", "2. Name"
     by = gets.chomp.to_i
     if by == 1
-      puts "Enter #{@action == 4 ? "product" : @pcl_text} ID: "
+      puts "Enter #{@pcl_text} ID: "
       id = gets.chomp.to_i
     else
-      puts "Enter #{@action == 4 ? "product" : @pcl_text} name: "
+      puts "Enter #{@pcl_text} name: "
       name = gets.chomp
     end
     return id, name    
   end
   
+  # Public: Used
   def self.delete(pcl,id,name)
     if id
       pcl.delete(id) 
